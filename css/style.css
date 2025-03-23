@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #1a1a2e;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 75px;
+    color: #ff9500;
+}
+
+nav {
+    background-color: #16213e;
+    padding: 15px 0;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.navbar {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.navbar li {
+    display: inline;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.navbar a:hover,
+.navbar .active {
+    background-color: #ff9500;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+#heading-container {
+    margin-top: 50px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    letter-spacing: 5px;
+    font-style: italic;
+    width: 100%;
+}
+
+#main-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.box {
+    background-color: #0f3460;
+    width: 380px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    color: #fff;
+}
+
+.box .heading {
+    font-size: 22px;
+    font-weight: bold;
+    color: #ff9500;
+    margin-bottom: 15px;
+}
+
+#controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+#controls input[type="radio"],
+#controls label {
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    padding: 15px;
+    font-size: 14px;
+    box-sizing: border-box;
+    resize: none;
+    border: none;
+    outline: none;
+    background: #16213e;
+    color: #fff;
+    border-radius: 5px;
+}
+
+#submit {
+    cursor: pointer;
+    outline: 0;
+    font-weight: bold;
+    margin: 15px 0;
+    text-align: center;
+    background-color: #ff9500;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    transition: 0.3s ease;
+    color: #fff;
+}
+
+#submit:hover {
+    background-color: #ff2626;
+}
