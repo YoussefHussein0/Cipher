@@ -67,7 +67,7 @@
           </div>
           <textarea
             placeholder="Enter text"
-            rows="20"
+            rows="10"
             id="input-text"
           ></textarea>
           <p id="status"></p>
@@ -79,13 +79,23 @@
           <textarea
             readonly
             placeholder="Output"
-            rows="20"
+            rows="10"
             id="output-text"
           ></textarea>
         </div>
+
+        <!-- New Brute Force Decryption Section -->
+        <div class="box">
+          <div class="heading">
+            <h2>Break Caesar Cipher</h2>
+          </div>
+          <textarea id="break-cipher-text" placeholder="Enter encrypted text here..."></textarea>
+          <button id="break-btn">Break Encryption</button>
+          <div id="break-results"></div>
+        </div>
       </div>
     </div>
+    
     <script src="../js/caesar.js"></script>
   </body>
-  <pre id="output"></pre>
 </html>

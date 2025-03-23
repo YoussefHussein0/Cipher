@@ -5,21 +5,46 @@ const selectEncodeOrDecode = document.getElementsByName("code");
 const inputText = document.getElementById("input-text");
 const outputText = document.getElementById("output-text");
 const shiftKey = document.getElementById("shift-input");
+document.addEventListener("DOMContentLoaded", function () {
+  let breakButton = document.getElementById("break-btn");
+  let breakCipherText = document.getElementById("break-cipher-text");
+  let breakResults = document.getElementById("break-results");
 
-  document.addEventListener("DOMContentLoaded", function () {
-    // Get the current page filename
-    let currentPage = window.location.pathname.split("/").pop();
+  if (breakButton) {
+    breakButton.addEventListener("click", function () {
+      let ciphertext = breakCipherText.value.toUpperCase().trim();
 
-    // Select all navbar links
-    let navLinks = document.querySelectorAll(".navbar a");
+      // Check if the input is empty
+      if (!ciphertext) {
+        breakResults.innerHTML = "<p>Please enter some encrypted text.</p>";
+        return;
+      }
 
-    navLinks.forEach((link) => {
-      // Check if the link href matches the current page
-      if (link.getAttribute("href") === currentPage) {
-        link.classList.add("active");
+      breakResults.innerHTML = "<h3>Possible Plaintexts:</h3>";
+
+      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+      for (let shift = 1; shift <= 25; shift++) {
+        let decryptedText = "";
+
+        for (let char of ciphertext) {
+          if (alphabet.includes(char)) {
+            let newIndex = (alphabet.indexOf(char) - shift + 26) % 26;
+            decryptedText += alphabet[newIndex];
+          } else {
+            decryptedText += char; // Keep spaces and punctuation
+          }
+        }
+
+        let resultItem = document.createElement("p");
+        resultItem.textContent = `Shift ${shift}: ${decryptedText}`;
+        breakResults.appendChild(resultItem);
       }
     });
-  });
+  } else {
+    console.error("Break Button not found!");
+  }
+});
 
 selectEncodeOrDecode.forEach((option) => {
   option.addEventListener("click", () => {
@@ -74,5 +99,3 @@ form.addEventListener("submit", (event) => {
   );
   outputText.textContent = cipherOutput;
 });
-
-
