@@ -148,7 +148,9 @@ textarea {
     border-radius: 5px;
 }
 
-#submit {
+#submit,
+.submit {
+    text-decoration: none;
     cursor: pointer;
     outline: 0;
     font-weight: bold;
@@ -162,6 +164,11 @@ textarea {
     transition: 0.3s ease;
     color: #E0E0E0;
     /* Light Gray */
+}
+.submit{
+}
+.submit:hover{
+    text-decoration: underline;
 }
 
 #submit:hover {
