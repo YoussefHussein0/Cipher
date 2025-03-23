@@ -6,6 +6,21 @@ const inputText = document.getElementById("input-text");
 const outputText = document.getElementById("output-text");
 const shiftKey = document.getElementById("shift-input");
 
+  document.addEventListener("DOMContentLoaded", function () {
+    // Get the current page filename
+    let currentPage = window.location.pathname.split("/").pop();
+
+    // Select all navbar links
+    let navLinks = document.querySelectorAll(".navbar a");
+
+    navLinks.forEach((link) => {
+      // Check if the link href matches the current page
+      if (link.getAttribute("href") === currentPage) {
+        link.classList.add("active");
+      }
+    });
+  });
+
 selectEncodeOrDecode.forEach((option) => {
   option.addEventListener("click", () => {
     if (option.value === "encode") {
@@ -59,3 +74,5 @@ form.addEventListener("submit", (event) => {
   );
   outputText.textContent = cipherOutput;
 });
+
+

@@ -1,3 +1,18 @@
+document.addEventListener("DOMContentLoaded", function () {
+  // Get the current page filename
+  let currentPage = window.location.pathname.split("/").pop();
+
+  // Select all navbar links
+  let navLinks = document.querySelectorAll(".navbar a");
+
+  navLinks.forEach((link) => {
+    // Check if the link href matches the current page
+    if (link.getAttribute("href") === currentPage) {
+      link.classList.add("active");
+    }
+  });
+});
+
 function vigenereCipher(text, key, mode) {
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   text = text.toUpperCase();
