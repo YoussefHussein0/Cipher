@@ -6,6 +6,11 @@ const inputText = document.getElementById("input-text");
 const outputText = document.getElementById("output-text");
 const railsInput = document.getElementById("rails");
 
+// Break Rail Fence Cipher elements
+const breakBtn = document.getElementById("break-btn");
+const breakCipherText = document.getElementById("break-cipher-text");
+const breakResults = document.getElementById("break-results");
+
 // Function to encrypt using Rail Fence Cipher
 function railFenceEncrypt(text, rails) {
   if (rails < 2) return text;
@@ -17,10 +22,7 @@ function railFenceEncrypt(text, rails) {
   for (let char of text) {
     fence[rail].push(char);
     rail += direction;
-
-    if (rail === rails - 1 || rail === 0) {
-      direction *= -1;
-    }
+    if (rail === rails - 1 || rail === 0) direction *= -1;
   }
 
   return fence.flat().join("");
@@ -39,10 +41,7 @@ function railFenceDecrypt(cipherText, rails) {
   for (let i = 0; i < cipherText.length; i++) {
     fence[rail].push("*");
     rail += direction;
-
-    if (rail === rails - 1 || rail === 0) {
-      direction *= -1;
-    }
+    if (rail === rails - 1 || rail === 0) direction *= -1;
   }
 
   // Fill fence with cipher text
@@ -59,13 +58,23 @@ function railFenceDecrypt(cipherText, rails) {
   for (let i = 0; i < cipherText.length; i++) {
     result += fence[rail].shift();
     rail += direction;
-
-    if (rail === rails - 1 || rail === 0) {
-      direction *= -1;
-    }
+    if (rail === rails - 1 || rail === 0) direction *= -1;
   }
 
   return result;
+}
+
+// Function to attempt breaking the Rail Fence Cipher
+function breakRailFenceCipher(text) {
+  breakResults.innerHTML = "";
+  let results = "";
+
+  for (let rails = 2; rails <= 10; rails++) {
+    let decrypted = railFenceDecrypt(text, rails);
+    results += `<p><strong>Rails ${rails}:</strong> ${decrypted}</p>`;
+  }
+
+  breakResults.innerHTML = results || "<p>No results found.</p>";
 }
 
 // Change heading based on encryption/decryption selection
@@ -106,4 +115,14 @@ form.addEventListener("submit", (event) => {
       : railFenceDecrypt(text, rails);
 
   outputText.textContent = result;
+});
+
+// Handle breaking the Rail Fence Cipher
+breakBtn.addEventListener("click", () => {
+  let text = breakCipherText.value.trim();
+  if (!text) {
+    breakResults.innerHTML = "<p>Please enter encrypted text.</p>";
+    return;
+  }
+  breakRailFenceCipher(text);
 });

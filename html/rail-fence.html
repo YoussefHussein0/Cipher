@@ -79,17 +79,35 @@
             id="output-text"
           ></textarea>
         </div>
+
+        <!-- New Break Rail Fence Section -->
+        <div class="box">
+          <div class="heading">
+            <h2>Break Rail-Fence</h2>
+          </div>
+          <textarea
+            id="break-cipher-text"
+            placeholder="Enter encrypted text here..."
+          ></textarea>
+          <button id="break-btn">Break</button>
+          <div id="break-results"></div>
+        </div>
       </div>
     </div>
+
     <div class="cipher-info">
       <h2>How to use</h2>
       <p>
         How it works: The text is written diagonally across multiple "rails" in
         a zigzag pattern, then read row by row to form the encrypted text. Enter
         your text in the input box, set the number of rails, and choose whether
-        to
-        <strong>encrypt</strong> or <strong>decrypt</strong>. Then click
+        to <strong>encrypt</strong> or <strong>decrypt</strong>. Then click
         <strong>Submit</strong> to see the result.
+      </p>
+      <p>
+        To break the Rail Fence Cipher, enter the encrypted text and click
+        <strong>Break</strong>. The program will attempt to decrypt it by
+        testing different rail numbers.
       </p>
     </div>
 
