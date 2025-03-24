@@ -4,101 +4,87 @@ const hOutput = document.querySelector("#heading-output");
 const selectEncodeOrDecode = document.getElementsByName("code");
 const inputText = document.getElementById("input-text");
 const outputText = document.getElementById("output-text");
-const shiftKey = document.getElementById("shift-input");
+const keyInput = document.getElementById("key-input");
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Get the current page filename
+  // Highlight the active page in the navbar
   let currentPage = window.location.pathname.split("/").pop();
-
-  // Select all navbar links
   let navLinks = document.querySelectorAll(".navbar a");
 
   navLinks.forEach((link) => {
-    // Check if the link href matches the current page
     if (link.getAttribute("href") === currentPage) {
       link.classList.add("active");
     }
   });
 });
 
+// Change labels when switching between encode and decode
 selectEncodeOrDecode.forEach((option) => {
   option.addEventListener("click", () => {
     if (option.value === "encode") {
       hInput.textContent = "Plaintext";
       hOutput.textContent = "Ciphertext";
-      inputText.value = "";
-      outputText.textContent = "";
     } else if (option.value === "decode") {
       hInput.textContent = "Ciphertext";
       hOutput.textContent = "Plaintext";
-      inputText.value = "";
-      outputText.textContent = "";
     }
+    inputText.value = "";
+    outputText.textContent = "";
   });
 });
 
+// Vigenère Cipher Logic
+function vigenereCipher(text, key, mode) {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let result = "";
+  let keyIndex = 0;
+
+  text = text.toUpperCase();
+  key = key.toUpperCase();
+
+  for (let i = 0; i < text.length; i++) {
+    let char = text[i];
+
+    if (alphabet.includes(char)) {
+      let textIndex = alphabet.indexOf(char);
+      let keyShift = alphabet.indexOf(key[keyIndex % key.length]);
+      let newIndex;
+
+      if (mode === "encode") {
+        newIndex = (textIndex + keyShift) % 26;
+      } else {
+        newIndex = (textIndex - keyShift + 26) % 26;
+      }
+
+      result += alphabet[newIndex];
+      keyIndex++;
+    } else {
+      result += char; // Keep spaces and punctuation
+    }
+  }
+
+  return result;
+}
+
+// Handle form submission
 form.addEventListener("submit", (event) => {
   event.preventDefault();
+
   let inputTextValue = inputText.value;
   let selectedOption = Array.from(selectEncodeOrDecode).find(
     (option) => option.checked
   );
-  let shiftValue = parseInt(shiftKey.value);
+  let keyValue = keyInput.value.trim();
 
-  function caesarCipher(decode, text, shift) {
-    if (decode === "decode") {
-      shift = -shift;
-    }
-    let result = "";
-    for (let i = 0; i < text.length; i++) {
-      let char = text.charAt(i);
-      const index = "abcdefghijklmnopqrstuvwxyz".indexOf(char.toLowerCase());
-      if (index !== -1) {
-        let newIndex = (index + shift) % 26;
-        if (newIndex < 0) {
-          newIndex += 26;
-        }
-        char =
-          char === char.toLowerCase()
-            ? "abcdefghijklmnopqrstuvwxyz"[newIndex]
-            : "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[newIndex];
-      }
-      result += char;
-    }
-    return result;
+  if (!keyValue) {
+    alert("Please enter a key.");
+    return;
   }
-  let cipherOutput = caesarCipher(
-    selectedOption.value,
+
+  let cipherOutput = vigenereCipher(
     inputTextValue,
-    shiftValue
+    keyValue,
+    selectedOption.value
   );
   outputText.textContent = cipherOutput;
-});
-
-// Brute Force Attack (Break Encryption)
-document.getElementById("break-btn").addEventListener("click", function () {
-  let ciphertext = document
-    .getElementById("break-cipher-text")
-    .value.toUpperCase();
-  let resultsDiv = document.getElementById("break-results");
-  resultsDiv.innerHTML = ""; // Clear previous results
-
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-  for (let shift = 1; shift <= 25; shift++) {
-    let decryptedText = "";
-
-    for (let char of ciphertext) {
-      if (alphabet.includes(char)) {
-        let newIndex = (alphabet.indexOf(char) - shift + 26) % 26;
-        decryptedText += alphabet[newIndex];
-      } else {
-        decryptedText += char; // Keep spaces and punctuation
-      }
-    }
-
-    let resultItem = document.createElement("p");
-    resultItem.textContent = `Shift ${shift}: ${decryptedText}`;
-    resultsDiv.appendChild(resultItem);
-  }
 });

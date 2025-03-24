@@ -12,29 +12,85 @@
         <li><a href="../index.html">Home</a></li>
         <li><a href="caesar.html">Caesar Cipher</a></li>
         <li><a href="vigenere.html">Vigenère Cipher</a></li>
-        <li><a href="rail-fence.html">Rail Fence Cipher</a></li>
+        <li><a href="rail-fence.html" class="active">Rail Fence Cipher</a></li>
       </ul>
     </nav>
 
     <div class="container">
       <div id="heading-container">
-        <h1>Rail Fence Cipher</h1>
+        <h1>RAIL FENCE CIPHER</h1>
       </div>
 
       <div id="main-container">
+        <!-- Controls Section -->
         <div class="box">
-          <div class="heading">Encrypt and Decrypt</div>
-          <textarea id="inputText" placeholder="Enter text..."></textarea>
+          <div class="heading">
+            <h2>Controls</h2>
+          </div>
+          <form id="controls">
+            <div class="row">
+              <div>
+                <input
+                  type="radio"
+                  name="code"
+                  id="encrypt"
+                  value="encrypt"
+                  checked
+                />
+                <label for="encrypt">Encrypt</label>
+              </div>
+              <div>
+                <input type="radio" name="code" id="decrypt" value="decrypt" />
+                <label for="decrypt">Decrypt</label>
+              </div>
+            </div>
+            <div class="column">
+              <div><span>Number of Rails:</span></div>
+              <div>
+                <input type="number" id="rails" min="2" max="10" value="3" />
+              </div>
+            </div>
+            <input type="submit" id="submit" value="Submit" />
+          </form>
+        </div>
 
-          <label for="rails">Number of Rails:</label>
-          <input type="number" id="rails" min="2" max="10" value="3" />
+        <!-- Input Section -->
+        <div class="box">
+          <div class="heading">
+            <h2 id="heading-input">Plaintext</h2>
+          </div>
+          <textarea
+            placeholder="Enter text"
+            rows="5"
+            id="input-text"
+          ></textarea>
+          <p id="status"></p>
+        </div>
 
-          <button id="encryptBtn">Encrypt</button>
-          <button id="decryptBtn">Decrypt</button>
-
-          <textarea id="outputText" placeholder="Result..." readonly></textarea>
+        <!-- Output Section -->
+        <div class="box">
+          <div class="heading">
+            <h2 id="heading-output">Ciphertext</h2>
+          </div>
+          <textarea
+            readonly
+            placeholder="Output"
+            rows="5"
+            id="output-text"
+          ></textarea>
         </div>
       </div>
+    </div>
+    <div class="cipher-info">
+      <h2>How to use</h2>
+      <p>
+        How it works: The text is written diagonally across multiple "rails" in
+        a zigzag pattern, then read row by row to form the encrypted text. Enter
+        your text in the input box, set the number of rails, and choose whether
+        to
+        <strong>encrypt</strong> or <strong>decrypt</strong>. Then click
+        <strong>Submit</strong> to see the result.
+      </p>
     </div>
 
     <script src="../js/rail-fence.js"></script>

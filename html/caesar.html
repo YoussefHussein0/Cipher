@@ -89,13 +89,27 @@
           <div class="heading">
             <h2>Break Caesar Cipher</h2>
           </div>
-          <textarea id="break-cipher-text" placeholder="Enter encrypted text here..."></textarea>
-          <button id="break-btn">Break Encryption</button>
+          <textarea
+            id="break-cipher-text"
+            placeholder="Enter encrypted text here..."
+          ></textarea>
+          <button id="break-btn">Break</button>
           <div id="break-results"></div>
         </div>
       </div>
     </div>
-    
+    <div class="cipher-info">
+      <h2>How to use</h2>
+      <p> 
+        How it works: Each letter of the text to be encrypted is replaced by a letter a fixed number of positions away in the alphabet. 
+        Enter your text in the input box and choose whether to
+        <strong>encode</strong> or <strong>decode</strong>. Set the shift key
+        value, then click <strong>Submit</strong> to see the result. You can
+        also break the encryption by trying all possible shifts.
+        
+      </p>
+    </div>
+
     <script src="../js/caesar.js"></script>
   </body>
 </html>

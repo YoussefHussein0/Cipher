@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Vigenère Cipher</title>
     <link rel="stylesheet" href="../css/style.css" />
-</head>
-<body>
+  </head>
+  <body>
     <nav>
-        <ul class="navbar">
+      <ul class="navbar">
         <li><a href="../index.html">Home</a></li>
         <li><a href="caesar.html">Caesar Cipher</a></li>
         <li><a href="vigenere.html">Vigenère Cipher</a></li>
@@ -14,49 +14,80 @@
       </ul>
     </nav>
     <div class="container">
-        <div id="heading-container">
-            <h1>VIGENÈRE CIPHER</h1>
+      <div id="heading-container">
+        <h1>VIGENÈRE CIPHER</h1>
+      </div>
+      <div id="main-container">
+        <div class="box">
+          <div class="heading">
+            <h2>Controls</h2>
+          </div>
+          <form id="controls">
+            <div class="row">
+              <div>
+                <input
+                  type="radio"
+                  name="code"
+                  id="encode"
+                  value="encode"
+                  checked="checked"
+                />
+                <label for="encode">Encode</label>
+              </div>
+              <div>
+                <input type="radio" name="code" id="decode" value="decode" />
+                <label for="decode">Decode</label>
+              </div>
+            </div>
+            <div class="column">
+              <div><span>Key:</span></div>
+              <div>
+                <input
+                  type="text"
+                  name="key"
+                  id="key-input"
+                  placeholder="Enter key"
+                  required
+                />
+              </div>
+            </div>
+            <input type="submit" name="submit" id="submit" value="Submit" />
+          </form>
         </div>
-        <div id="main-container">
-            <div class="box">
-                <div class="heading">
-                    <h2>Controls</h2>
-                </div>
-                <form id="controls">
-                    <div class="row">
-                        <div>
-                            <input type="radio" name="code" id="encode" value="encode" checked="checked" />
-                            <label for="encode">Encode</label>
-                        </div>
-                        <div>
-                            <input type="radio" name="code" id="decode" value="decode" />
-                            <label for="decode">Decode</label>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div><span>Key:</span></div>
-                        <div>
-                            <input type="text" name="key" id="key-input" placeholder="Enter key" required />
-                        </div>
-                    </div>
-                    <input type="submit" name="submit" id="submit" value="Submit" />
-                </form>
-            </div>
-            <div class="box">
-                <div class="heading">
-                    <h2 id="heading-input">Plaintext</h2>
-                </div>
-                <textarea placeholder="Enter plaintext" rows="20" id="input-text"></textarea>
-                <p id="status"></p>
-            </div>
-            <div class="box">
-                <div class="heading">
-                    <h2 id="heading-output">Ciphertext</h2>
-                </div>
-                <textarea readonly placeholder="Output" rows="20" id="output-text"></textarea>
-            </div>
+        <div class="box">
+          <div class="heading">
+            <h2 id="heading-input">Plaintext</h2>
+          </div>
+          <textarea
+            placeholder="Enter plaintext"
+            rows="20"
+            id="input-text"
+          ></textarea>
+          <p id="status"></p>
         </div>
+        <div class="box">
+          <div class="heading">
+            <h2 id="heading-output">Ciphertext</h2>
+          </div>
+          <textarea
+            readonly
+            placeholder="Output"
+            rows="20"
+            id="output-text"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="cipher-info">
+      <h2>How to use</h2>
+      <p>
+        How it works: This cipher uses a keyword to shift letters based on
+        different values instead of a fixed number like the Caesar Cipher. Enter
+        your text in the input box, type in a keyword, and choose whether to
+        <strong>encrypt</strong> or <strong>decrypt</strong>. Then click
+        <strong>Submit</strong> to get the result.
+      </p>
     </div>
     <script src="../js/vigenere.js"></script>
-</body>
+  </body>
 </html>
