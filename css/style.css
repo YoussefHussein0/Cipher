@@ -264,3 +264,19 @@ textarea {
     line-height: 1.6;
     color: #666666;
 }
+
+#break-vigenere-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#break-vigenere-btn:hover {
+    background-color: #3b863d;
+}

@@ -13,6 +13,7 @@
         <li><a href="rail-fence.html">Rail Fence Cipher</a></li>
       </ul>
     </nav>
+    
     <div class="container">
       <div id="heading-container">
         <h1>VIGENÈRE CIPHER</h1>
@@ -25,13 +26,7 @@
           <form id="controls">
             <div class="row">
               <div>
-                <input
-                  type="radio"
-                  name="code"
-                  id="encode"
-                  value="encode"
-                  checked="checked"
-                />
+                <input type="radio" name="code" id="encode" value="encode" checked />
                 <label for="encode">Encode</label>
               </div>
               <div>
@@ -42,43 +37,47 @@
             <div class="column">
               <div><span>Key:</span></div>
               <div>
-                <input
-                  type="text"
-                  name="key"
-                  id="key-input"
-                  placeholder="Enter key"
-                  required
-                />
+                <input type="text" name="key" id="key-input" placeholder="Enter key" required />
               </div>
             </div>
-            <input type="submit" name="submit" id="submit" value="Submit" />
+            <input type="submit" id="submit" value="Submit" />
           </form>
         </div>
+
         <div class="box">
           <div class="heading">
             <h2 id="heading-input">Plaintext</h2>
           </div>
-          <textarea
-            placeholder="Enter plaintext"
-            rows="20"
-            id="input-text"
-          ></textarea>
+          <textarea placeholder="Enter plaintext" rows="20" id="input-text"></textarea>
           <p id="status"></p>
         </div>
+
         <div class="box">
           <div class="heading">
             <h2 id="heading-output">Ciphertext</h2>
           </div>
-          <textarea
-            readonly
-            placeholder="Output"
-            rows="20"
-            id="output-text"
-          ></textarea>
+          <textarea readonly placeholder="Output" rows="20" id="output-text"></textarea>
+        </div>
+
+        <div class="box">
+          <div class="heading">
+            <h2>Break Vigenère Cipher</h2>
+          </div>
+          <textarea placeholder="Enter ciphertext to break" rows="5" id="break-vigenere-text"></textarea>
+          <button id="break-vigenere-btn">Break</button>
+        </div>
+
+        <!-- Fix: Changed ID for the results container -->
+        <div id="break-results-container" class="box" style="display: none;">
+          <div class="heading">
+            <h2>Brute Force Results</h2>
+          </div>
+          <div id="break-results" class="results-container"></div>
         </div>
       </div>
     </div>
-    <div class="cipher-info">
+
+    <!-- <div class="cipher-info">
       <h2>How to use</h2>
       <p>
         How it works: This cipher uses a keyword to shift letters based on
@@ -87,7 +86,8 @@
         <strong>encrypt</strong> or <strong>decrypt</strong>. Then click
         <strong>Submit</strong> to get the result.
       </p>
-    </div>
+    </div> -->
+
     <script src="../js/vigenere.js"></script>
   </body>
 </html>
