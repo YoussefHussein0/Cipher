@@ -7,7 +7,6 @@ const outputText = document.getElementById("output-text");
 const keyInput = document.getElementById("key-input");
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Highlight the active page in the navbar
   let currentPage = window.location.pathname.split("/").pop();
   let navLinks = document.querySelectorAll(".navbar a");
 
@@ -18,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// Change labels when switching between encode and decode
 selectEncodeOrDecode.forEach((option) => {
   option.addEventListener("click", () => {
     if (option.value === "encode") {
@@ -33,7 +31,6 @@ selectEncodeOrDecode.forEach((option) => {
   });
 });
 
-// Vigenère Cipher Logic
 function vigenereCipher(text, key, mode) {
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   let result = "";
@@ -59,14 +56,13 @@ function vigenereCipher(text, key, mode) {
       result += alphabet[newIndex];
       keyIndex++;
     } else {
-      result += char; // Keep spaces and punctuation
+      result += char;
     }
   }
 
   return result;
 }
 
-// Handle form submission
 form.addEventListener("submit", (event) => {
   event.preventDefault();
 
@@ -89,104 +85,191 @@ form.addEventListener("submit", (event) => {
   outputText.textContent = cipherOutput;
 });
 
-// Breaking the Vigenère Cipher
 const breakVigenereBtn = document.getElementById("break-vigenere-btn");
 const breakVigenereText = document.getElementById("break-vigenere-text");
 const breakResults = document.getElementById("break-results");
 
-// Common 3-letter words
-const commonThreeLetterWords = [
-  "THE",
-  "AND",
-  "FOR",
-  "ARE",
-  "BUT",
-  "NOT",
-  "YOU",
-  "ALL",
-  "ANY",
-  "CAN",
-  "HIS",
-  "HER",
-  "OUT",
-  "ONE",
-  "DAY",
-  "NOW",
-  "SEE",
-  "WAY",
-  "GET",
-  "NEW",
-  "USE",
-];
+const ENGLISH_FREQUENCIES = {
+  A: 0.0812,
+  B: 0.0149,
+  C: 0.0271,
+  D: 0.0432,
+  E: 0.1202,
+  F: 0.023,
+  G: 0.0203,
+  H: 0.0592,
+  I: 0.0731,
+  J: 0.001,
+  K: 0.0069,
+  L: 0.0398,
+  M: 0.0261,
+  N: 0.0695,
+  O: 0.0768,
+  P: 0.0182,
+  Q: 0.0011,
+  R: 0.0602,
+  S: 0.0628,
+  T: 0.091,
+  U: 0.0288,
+  V: 0.0111,
+  W: 0.0209,
+  X: 0.0017,
+  Y: 0.0211,
+  Z: 0.0007,
+};
 
-// Function to analyze letter frequency (to guess key shifts)
-function getLetterFrequencies(text) {
+const calculateIC = (text) => {
+  const cleanText = text.toUpperCase().replace(/[^A-Z]/g, "");
   const frequencies = {};
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const length = cleanText.length;
 
-  text = text.toUpperCase().replace(/[^A-Z]/g, "");
-
-  for (let char of text) {
-    frequencies[char] = (frequencies[char] || 0) + 1;
+  for (let i = 0; i < length; i++) {
+    frequencies[cleanText[i]] = (frequencies[cleanText[i]] || 0) + 1;
   }
 
-  return Object.keys(frequencies)
-    .map((char) => ({ char, freq: frequencies[char] }))
-    .sort((a, b) => b.freq - a.freq);
-}
+  let sum = 0;
+  for (const letter in frequencies) {
+    const count = frequencies[letter];
+    sum += count * (count - 1);
+  }
 
-// Function to guess a 3-letter key
-function guessKeys(ciphertext) {
-  let keyGuess = "";
-  let keyLength = 3; // Fixed key length
+  return length > 1 ? sum / (length * (length - 1)) : 0;
+};
 
-  for (let i = 0; i < keyLength; i++) {
-    let subtext = "";
-    for (let j = i; j < ciphertext.length; j += keyLength) {
-      subtext += ciphertext[j];
+const getSequences = (text, keyLength) => {
+  const sequences = Array(keyLength)
+    .fill("")
+    .map(() => "");
+  let j = 0;
+
+  for (let i = 0; i < text.length; i++) {
+    if (/[A-Z]/i.test(text[i])) {
+      const position = j % keyLength;
+      sequences[position] += text[i].toUpperCase();
+      j++;
     }
-
-    let letterFrequencies = getLetterFrequencies(subtext);
-    let mostFrequent = letterFrequencies[0]?.char || "E"; // Assume 'E' is common
-    let shift = (mostFrequent.charCodeAt(0) - "E".charCodeAt(0) + 26) % 26;
-
-    keyGuess += String.fromCharCode("A".charCodeAt(0) + shift);
   }
 
-  return [keyGuess];
-}
+  return sequences;
+};
 
-// Function to filter valid key guesses
-function filterValidKeys(guessedKeys) {
-  return guessedKeys.filter((key) => commonThreeLetterWords.includes(key));
-}
+const getFrequencies = (text) => {
+  const freqs = {};
+  for (let i = 0; i < 26; i++) freqs[String.fromCharCode(65 + i)] = 0;
 
-// Function to break the cipher
+  for (let ch of text.toUpperCase()) {
+    if (/[A-Z]/.test(ch)) freqs[ch]++;
+  }
+
+  const total = text.length || 1;
+  for (let ch in freqs) freqs[ch] /= total;
+
+  return freqs;
+};
+
+const calculateChiSquared = (frequencies) => {
+  let chiSquared = 0;
+  for (let i = 0; i < 26; i++) {
+    const letter = String.fromCharCode(65 + i);
+    const observed = frequencies[letter] || 0;
+    const expected = ENGLISH_FREQUENCIES[letter] || 0;
+    if (expected > 0) {
+      chiSquared += Math.pow(observed - expected, 2) / expected;
+    }
+  }
+  return chiSquared;
+};
+
+const findBestShifts = (sequence) => {
+  let bestShift = 0;
+  let lowestChi = Infinity;
+
+  for (let shift = 0; shift < 26; shift++) {
+    let decrypted = "";
+    for (let i = 0; i < sequence.length; i++) {
+      let char = sequence[i];
+      let code = char.charCodeAt(0);
+      if (code >= 65 && code <= 90) {
+        decrypted += String.fromCharCode(((code - 65 - shift + 26) % 26) + 65);
+      }
+    }
+    const freqs = getFrequencies(decrypted);
+    const chi = calculateChiSquared(freqs);
+    if (chi < lowestChi) {
+      lowestChi = chi;
+      bestShift = shift;
+    }
+  }
+
+  return bestShift;
+};
+
+const estimateKeyLength = (text, maxKeyLength = 20) => {
+  let bestKeyLengths = [];
+  for (let keyLen = 1; keyLen <= maxKeyLength; keyLen++) {
+    const sequences = getSequences(text, keyLen);
+    const icAvg =
+      sequences.reduce((acc, seq) => acc + calculateIC(seq), 0) /
+      sequences.length;
+    bestKeyLengths.push({ keyLen, icAvg });
+  }
+
+  bestKeyLengths.sort(
+    (a, b) => Math.abs(0.067 - a.icAvg) - Math.abs(0.067 - b.icAvg)
+  );
+  return bestKeyLengths.slice(0, 3).map((x) => x.keyLen);
+};
+
 function breakVigenereCipher(text) {
   const resultsContainer = document.getElementById("break-results-container");
   const resultsDiv = document.getElementById("break-results");
 
-  resultsContainer.style.display = "block"; // Show results
+  resultsContainer.style.display = "block";
+  resultsDiv.innerHTML = "<p>Analyzing ciphertext... 🔍</p>";
 
-  // Clear previous results
-  resultsDiv.innerHTML = "<p>Trying to break the cipher...</p>";
+  const cleanText = text.toUpperCase().replace(/[^A-Z]/g, "");
 
-  let guessedKeys = guessKeys(text);
-  let validKeys = filterValidKeys(guessedKeys);
+  const keyLengths = [3];
+  resultsDiv.innerHTML = `<p>Estimated key lengths: ${keyLengths.join(
+    ", "
+  )}</p>`;
 
-  if (validKeys.length === 0) {
-    resultsDiv.innerHTML +=
-      "<p>No common 3-letter words matched. Showing best guess:</p>";
-    validKeys = guessedKeys; // If no match, show what we got
-  }
+  keyLengths.forEach((keyLen) => {
+    const sequences = getSequences(cleanText, keyLen);
+    let key = "";
 
-  validKeys.forEach((key) => {
-    let decryptedText = vigenereCipher(text, key, "decode");
-    resultsDiv.innerHTML += `<p><strong>Key:</strong> ${key} <br> <strong>Decryption:</strong> ${decryptedText}</p>`;
+    for (let i = 0; i < keyLen; i++) {
+      let bestShift = findBestShifts(sequences[i]);
+      key += String.fromCharCode(65 + bestShift);
+    }
+
+    const decryptedRaw = vigenereCipher(cleanText, key, "decode");
+
+    let formatted = "";
+    let j = 0;
+
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      if (/[A-Z]/i.test(char)) {
+        formatted += decryptedRaw[j];
+        j++;
+      } else {
+        formatted += char;
+      }
+    }
+
+    formatted =
+      formatted.charAt(0).toUpperCase() + formatted.slice(1).toLowerCase();
+
+    resultsDiv.innerHTML += `
+    <div class="break-result">
+      <p><strong>Key:</strong> <code>${key}</code></p>
+      <pre style="white-space: pre-wrap; background:#252525; padding: 10px; border-radius: 5px;">${formatted}</pre>
+    </div>`;
   });
 }
 
-// Event listener for the break button
+
 breakVigenereBtn.addEventListener("click", () => {
   let ciphertext = breakVigenereText.value.trim();
   if (!ciphertext) {
